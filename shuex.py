@@ -14,6 +14,7 @@ from vk.keyboards import Keyboard
 from vk.types import message
 from vk.utils import TaskManager
 
+
 with open("config.toml", "r", encoding="utf-8") as f:
     if "message_text" in os.environ and "token" in os.environ:
         config = dict(os.environ)
@@ -48,6 +49,10 @@ async def apply_required_settings(group_id: int):
             "bots_capabilities": 1,
             "bots_add_to_chat": 1,
         },
+    )
+    await vk.api_request(
+        "groups.setLongPollSettings",
+        {"group_id": group_id, "enabled": 1, "api_version": "5.103", "message_new": 1},
     )
 
 
