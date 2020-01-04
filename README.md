@@ -14,6 +14,14 @@
 
 ## Установка
 ### На Heroku
-Понадобится аккаунт Heroku с привязанной картой (карта QIWI прокатит). Нажмите на кнопку ниже, чтобы загрузить shuex
+Понадобится аккаунт Heroku с привязанной картой (дебетовая карта QIWI подойдёт).
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/heroku/node-js-getting-started)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/shueteam/shuex)
+
+1. Нажмите на кнопку Deploy to Heroku
+2. В поле token введите ключ сообщества, полученный в этапе 2 подготовки группы
+3. В меню выбора региона выберите Europe для лучшей производительности и нажмите Deploy app
+4. После успешного деплоя ваш рейд бот готов разрывать беседы! Никакой дополнительной настройки не требуется
+
+### Локально
+To be done.
