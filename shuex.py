@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 import random
 from collections import deque
 
@@ -13,10 +14,17 @@ from vk.keyboards import Keyboard
 from vk.types import message
 from vk.utils import TaskManager
 
-with open("config.toml", "r", encoding="utf-8") as f:
-    config = toml.load(f)
 
-logging.basicConfig(level=config["misc"]["logging_level"])
+with open("config.toml", "r", encoding="utf-8") as f:
+    if "message_text" in os.environ and "token" in os.environ:
+        config = dict(os.environ)
+        for key, value in toml.load(f).items():
+            if key not in config:
+                config[key] = value
+    else:
+        config = toml.load(f)
+
+logging.basicConfig(level=config["logging_level"])
 
 vk = VK(config["token"])
 task_manager = TaskManager(vk.loop)
@@ -26,14 +34,15 @@ dp = Dispatcher(vk)
 
 
 def adjust_message_text():
-    message_text = config["text"]["message_text"].encode()
+    message_text = config["message_text"].encode()
     if len(message_text) < 4096:
-        message_text = message_text * round(4096 / len(message_text))
-        config["text"]["message_text"] = message_text.decode()
+        message_text = message_text * int(4096 / len(message_text))
+        config["message_text"] = message_text.decode()
 
 
 @dp.message_handler(chat_action=message.Action.chat_invite_user)
 async def chat_invite_user(msg: types.Message, _):
+    logging.info(f"Started raiding {msg.peer_id}.")
     sent_message_count = 0
     while True:
         try:
@@ -50,18 +59,18 @@ async def chat_invite_user(msg: types.Message, _):
                 button_colors.rotate(sent_message_count % len(button_colors))
                 for button in range(0, 4):
                     keyboard.add_text_button(
-                        config["text"]["buttons_text"], color=button_colors[button]
+                        config["buttons_text"], color=button_colors[button]
                     )
                 if row != 9:
                     keyboard.add_row()
             await api.messages.send(
                 random_id=random.getrandbits(31) * random.choice([-1, 1]),
                 peer_id=msg.peer_id,
-                message=config["text"]["message_text"],
+                message=config["message_text"],
                 keyboard=keyboard.get_keyboard(),
             )
             sent_message_count += 1
-            await asyncio.sleep(config["misc"]["delay"])
+            await asyncio.sleep(config["delay"])
         except APIException as e:
             logging.info(f"Stopped raiding {msg.peer_id}. Reason: {e}")
             break
