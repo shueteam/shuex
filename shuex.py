@@ -14,7 +14,6 @@ from vk.keyboards import Keyboard
 from vk.types import message
 from vk.utils import TaskManager
 
-
 with open("config.toml", "r", encoding="utf-8") as f:
     if "message_text" in os.environ and "token" in os.environ:
         config = dict(os.environ)
@@ -38,6 +37,18 @@ def adjust_message_text():
     if len(message_text) < 4096:
         message_text = message_text * int(4096 / len(message_text))
         config["message_text"] = message_text.decode()
+
+
+async def apply_required_settings(group_id: int):
+    await vk.api_request(
+        "groups.setSettings",
+        {
+            "group_id": group_id,
+            "messages": 1,
+            "bots_capabilities": 1,
+            "bots_add_to_chat": 1,
+        },
+    )
 
 
 @dp.message_handler(chat_action=message.Action.chat_invite_user)
@@ -77,8 +88,10 @@ async def chat_invite_user(msg: types.Message, _):
 
 
 async def run():
+    group_id = await get_group_id(vk)
+    await apply_required_settings(group_id)
     adjust_message_text()
-    dp.run_polling(await get_group_id(vk))
+    dp.run_polling(group_id)
 
 
 if __name__ == "__main__":
