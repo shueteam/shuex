@@ -13,6 +13,7 @@
 Понадобится аккаунт Heroku с привязанной картой (дебетовая карта QIWI подойдёт).
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/shueteam/shuex)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshueteam%2Fshuex.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshueteam%2Fshuex?ref=badge_shield)
 
 1. Нажмите на кнопку Deploy to Heroku
 2. В поле token введите ключ сообщества, полученный в этапе 2 подготовки группы
@@ -28,3 +29,7 @@ pip install -r requirements.txt --upgrade
 ```
 4. Откройте файл `config.toml` любым текстовым редактором и укажите ключ сообщества, полученный в этапе 2 подготовки группы в поле token
 5. Для запуска введите в командную строку `python shuex.py`
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fshueteam%2Fshuex.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fshueteam%2Fshuex?ref=badge_large)
